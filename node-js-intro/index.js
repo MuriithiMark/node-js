@@ -1,9 +1,8 @@
 const http = require("node:http");
-const retriveParams = require("./utils/retrieveParams");
+
 const reqUtils = require("./utils/reqUtils");
 
 const port = 8000;
-
 const products = [
     {
         id: 1,
@@ -18,7 +17,7 @@ const products = [
         price: 2
     },
     {
-        id: 1,
+        id: 3,
         category: 'Vehicles',
         name: 'Subaru Forester',
         price: 20000
@@ -26,7 +25,12 @@ const products = [
 ]
 
 /**
- * @type {{path: string, method?: string, action: (req: http.IncomingMessage, res: http.ServerResponse<http.IncomingMessage> & { req: http.IncomingMessage; })}[]}
+ * @type {{
+ *      path: string,
+ *      method?: string,
+ *      action: (req: http.IncomingMessage, 
+ *          res: http.ServerResponse<http.IncomingMessage> & { req: http.IncomingMessage; }) => void
+ *      }[]}
  */
 const routes = [
     {
@@ -79,7 +83,7 @@ const routes = [
 ]
 
 const server = http.createServer((req, res) => {
-    console.log(req.url)
+    console.info(`\n${req.method} ${req.url}`)
 
     // Path processing and mapping
     const currentPath = routes.find((route) => {
@@ -99,7 +103,7 @@ const server = http.createServer((req, res) => {
                 continue;
             }
             if (templatePath[i] !== realPath[i]) {
-                break;
+                return false;
             }
             truthCheck = true;
         }
@@ -127,5 +131,5 @@ const server = http.createServer((req, res) => {
 })
 
 server.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`)
+    console.log(`Server running at http://localhost:${port}\n`)
 })
