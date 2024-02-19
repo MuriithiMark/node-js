@@ -1,7 +1,14 @@
+const http = require("node:http");
+
+/**
+ * 
+ * @param {http.IncomingMessage} req 
+ * @param {string} templatePath 
+ * @returns {http.IncomingMessage}
+ */
 const reqUtils = (req, templatePath) => {
     const pathTemplateSubStrings = templatePath.split('/');
     const realPathSubStrings = req.url.split('/');
-    const paramToValueMap = new Map();
     req.params = {}
     pathTemplateSubStrings.forEach((portion, index) => {
         if (portion.startsWith(':')) {

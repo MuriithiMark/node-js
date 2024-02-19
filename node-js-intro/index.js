@@ -26,26 +26,25 @@ const products = [
 ]
 
 /**
- * @type {{path: string, method: (req: http.IncomingMessage, res: http.ServerResponse<http.IncomingMessage> & { req: http.IncomingMessage; })}[]}
+ * @type {{path: string, method?: string, action: (req: http.IncomingMessage, res: http.ServerResponse<http.IncomingMessage> & { req: http.IncomingMessage; })}[]}
  */
 const routes = [
     {
         path: '/',
-        method: (req, res) => {
+        action: (req, res) => {
             res.write(`Home Page`)
         }
     },
     {
         path: '/products',
-        method: (req, res) => {
+        action: (req, res) => {
             res.setHeader('Content-Type', 'application/json')
             res.write(JSON.stringify(products))
         }
     },
     {
         path: '/products/:productId',
-        method: (req, res) => {
-            req = reqUtils(req, `/products/:productId`)
+        action: (req, res) => {
             const productId = Number(req.params.productId);
             const product = products.find((product) => product.id === productId);
             if (!product) {
@@ -60,9 +59,7 @@ const routes = [
     },
     {
         path: '/products/:category/:productId',
-        method: (req, res) => {
-            req = reqUtils(req, '/products/:category/:productId')
-            console.log(`Params: `, req.params)
+        action: (req, res) => {
             const productId = Number(req.params.productId);
             const category = req.params.category;
             const product = products.find((product) =>
@@ -83,32 +80,38 @@ const routes = [
 
 const server = http.createServer((req, res) => {
     console.log(req.url)
-    // Process path to avoid error
+
+    // Path processing and mapping
     const currentPath = routes.find((route) => {
         if (req.url === route.path) {
             return true;
         }
-        const portions = route.path.split('/');
-        const real = req.url.split('/');
-        if (real.length !== portions.length) {
+        const templatePath = route.path.split('/');
+        const realPath = req.url.split('/');
+        if (realPath.length !== templatePath.length) {
             return false
         }
         // by default true, unless match fail
-        let truthCheck = true;
+        let truthCheck = false;
 
-        for (let i = 0; i < portions.length; i++) {
-            if (portions[i].startsWith(':')) {
+        for (let i = 0; i < templatePath.length; i++) {
+            if (templatePath[i].startsWith(':')) {
                 continue;
             }
-            if (portions[i] !== real[i]) {
-                truthCheck *= false;
+            if (templatePath[i] !== realPath[i]) {
                 break;
             }
-            truthCheck *= true;
+            truthCheck = true;
+        }
+
+        if(truthCheck) {
+            // Retrieve Params if any
+            req = reqUtils(req, route.path)
         }
 
         return truthCheck;
     });
+
     if (!currentPath) {
         res.setHeader('status', 404)
         res.write('page not found')
@@ -117,7 +120,9 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-    currentPath.method(req, res);
+    // TODO handle route methods: GET, POST, PUT, DELETE
+
+    currentPath.action(req, res);
     res.end()
 })
 
