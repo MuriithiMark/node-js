@@ -81,6 +81,8 @@ const routes = [
             res.write(JSON.stringify(product))
         }
     },
+
+    // MAIN ASSIGNMENT
     {
         path: "/events",
         action: (req, res) => {
