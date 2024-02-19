@@ -1,6 +1,7 @@
 const http = require("node:http");
 
 const reqUtils = require("./utils/reqUtils");
+const jsonData = require("./data/events.json");
 
 const port = 8000;
 const products = [
@@ -78,6 +79,31 @@ const routes = [
                 return;
             }
             res.write(JSON.stringify(product))
+        }
+    },
+    {
+        path: "/events",
+        action: (req, res) => {
+            res.setHeader('Content-Type', 'application/json')
+            res.write(JSON.stringify(jsonData))
+        }
+
+    },
+    {
+        path: "/events/:eventId",
+        action: (req, res) => {
+
+            const eventId = Number(req.params.eventId);
+            const event = jsonData.find((event) => event.id === eventId);
+            if(!event) {
+                res.setHeader('Content-Type', 'application/json')
+                res.write(JSON.stringify({
+                    status: 'fail',
+                    message: 'no such event'
+                }))
+            }
+
+            res.write(JSON.stringify(event));
         }
     }
 ]
