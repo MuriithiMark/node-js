@@ -28,16 +28,7 @@ const zipFileName = path.join(__dirname, "files", "output-zip-file.zip")
 const createAndZipFile_2 = async () => {
     try {
         await fsPromises.writeFile(fileName, `Hello there. I'm output file.`)
-        // zipper.sync.zip(fileName).compress().save(zipFileName)
-        zipper.zip(fileName, async (error, zipped) => {
-            if(error) {
-                console.error('Error zipping file')
-                return;
-            }
-            await zipped.compress()
-            const buffer = zipped.memory()
-            await fsPromises.writeFile(zipFileName, buffer)
-        })
+        zipper.sync.zip(fileName).compress().save(zipFileName)
     } catch (error) {
         console.error(error);
     }
