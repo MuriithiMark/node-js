@@ -1,26 +1,31 @@
-const fs = require("fs")
+const fsPromises = require("fs").promises
 const path = require("path")
 const http = require("http")
 
-const HOME_PAGE_FILE_NAME = path.join(__dirname, "templates", "home.html")
-const ABOUT_PAGE_FILE_NAME = path.join(__dirname, "templates", "about.html")
+const HOME_PAGE_FILE_NAME = path.join(__dirname, "templates", "index.html")
+const SIGN_UP_PAGE_FILE_NAME = path.join(__dirname, "templates", "sign-up.html")
+const ERROR_PAGE_FILE_NAME = path.join(__dirname, "templates", "404.html")
+const STYLES = path.join(__dirname, "templates", "styles.css")
 const PORT = 8001;
 
-const server = http.createServer((req, res) => {
+const getFileContent = async (fileName) => {
+    const fileContent = await fsPromises.readFile(fileName, { encoding: "utf8" });
+    return fileContent;
+}
 
-    res.setHeader('Content-Type', "application/html")
+const server = http.createServer(async (req, res) => {
     switch (req.url) {
         case "/":
-            res.writeHead(200, 'OK')
-            res.write('Home Page');
+            res.write(await getFileContent(HOME_PAGE_FILE_NAME))
             break;
-        case "/about":
-            res.writeHead(200, 'OK')
-            res.write('About Page')
+        case "/sign-up":
+            res.write(await getFileContent(SIGN_UP_PAGE_FILE_NAME))
+            break;
+        case "/styles.css":
+            res.write(await getFileContent(STYLES))
             break;
         default:
-            res.writeHead(404, 'Page Not Found')
-            res.write('Page Not Found')
+            res.write(await getFileContent(ERROR_PAGE_FILE_NAME))
     }
     res.end()
 })
