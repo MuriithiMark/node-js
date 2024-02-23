@@ -3,19 +3,6 @@
     "price": 1000,
     "name": "Oranges",
     "description": "Fruits for sale",
-    "id": "12c87ef6-b9ec-4f4c-b026-ce475d424e60"
-  },
-  {
-    "price": 1000,
-    "name": "Oranges",
-    "description": "Fruits for sale",
     "id": "44d98951-903c-4c3e-8602-22aa4b220fd6"
-  },
-  {
-    "price": 1000,
-    "name": "Apples",
-    "description": "Fruits for sale",
-    "id": "d2ed4e1b-3d75-474f-868d-22e511044df7"
-  },
-  { "price": 1000, "name": "Apples", "description": "Fruits for sale" }
+  }
 ]

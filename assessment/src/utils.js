@@ -65,12 +65,13 @@ async function addJsonData() {
             console.error('edited Product is invalid ', editedProduct)
             throw new Error('Invalid Product')
         }
-        const productIndex = products.find((product) => product.id === editedProduct.id)
+        const productIndex = products.findIndex((product) => product.id === editedProduct.id)
         if (productIndex === -1) {
             console.error('No such product in database');
             throw new Error('No such product with id: ', editedProduct.id)
         }
-        products[productIndex] = { ...(products[productIndex]), ...editedProduct };
+        const originalProduct = products[productIndex]
+        products[productIndex] = { ...(originalProduct), ...editedProduct };
         await fsPromises.writeFile(PRODUCTS_FILE, JSON.stringify(products))
     }
 
@@ -80,8 +81,8 @@ async function addJsonData() {
             console.error('Invalid product id')
             throw new Error('invalid id ', productId)
         }
-        products = products.filter((product) => product.id !== productId)
-        await fsPromises.writeFile(PRODUCTS_FILE, JSON.stringify(products))
+        const updatedProducts = products.filter((product) => product.id !== productId)
+        await fsPromises.writeFile(PRODUCTS_FILE, JSON.stringify(updatedProducts))
     }
 
     return {

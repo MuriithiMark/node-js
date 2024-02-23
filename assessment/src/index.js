@@ -5,7 +5,7 @@ const app = express()
 const port = 3000;
 app.use(express.json())
 
-const { getProducts, addProduct } = await addJsonData()
+const { getProducts, addProduct, deleteProduct, updateProduct } = await addJsonData()
 // GET Products
 app.get("/api/products", async (req, res) => {
     const products = await getProducts()
@@ -27,11 +27,45 @@ app.post("/api/products", async (req, res) => {
         console.log(error)
         res.send({
             status: "fail",
-            message: "adding product failed"
+            message: error.message
         })
     }
 
     res.end()
+})
+
+// DELETE Product
+app.delete("/api/products/:id", async (req, res) => {
+    const id = req.body.id;
+    try {
+        await deleteProduct(id)
+        res.send({
+            status: "success",
+            message: "product deleted"
+        })
+    } catch (error) {
+        console.log(error)
+        res.send({
+            status: "fail",
+            message: error.message
+        })
+    }
+})
+
+app.put("/api/products/update", async (req, res) => {
+    const updatedProduct = req.body;
+    try {
+        await updateProduct(updatedProduct)
+        res.send({
+            status: "success",
+            message: "product updated"
+        })
+    } catch (error) {
+        res.send({
+            status: "fail",
+            message: error.message
+        })
+    }
 })
 
 app.listen(port, () => {
