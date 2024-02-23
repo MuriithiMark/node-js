@@ -1,11 +1,12 @@
 import express from "express"
-import addJsonData from "./utils.js";
+import { dbMethods, initDB } from "./utils.js";
 
 const app = express()
 const port = 3000;
 app.use(express.json())
 
-const { getProducts, addProduct, deleteProduct, updateProduct } = await addJsonData()
+const { getProducts, addProduct, deleteProduct, updateProduct, editProduct } = await dbMethods()
+
 // GET Products
 app.get("/api/products", async (req, res) => {
     const products = await getProducts()
@@ -34,6 +35,40 @@ app.post("/api/products", async (req, res) => {
     res.end()
 })
 
+// UPDATE Product
+app.put("/api/products/update", async (req, res) => {
+    const updatedProduct = req.body;
+    try {
+        await updateProduct(updatedProduct)
+        res.send({
+            status: "success",
+            message: "product updated"
+        })
+    } catch (error) {
+        res.send({
+            status: "fail",
+            message: error.message
+        })
+    }
+})
+
+// EDIT Product
+app.patch("/api/products/edit", async (req, res) => {
+    const editedProduct = req.body;
+    try {
+        await editProduct(editedProduct)
+        res.send({
+            status: "success",
+            message: "product edited"
+        })
+    } catch (error) {
+        res.send({
+            status: "fail",
+            message: error.message
+        })
+    }
+})
+
 // DELETE Product
 app.delete("/api/products/:id", async (req, res) => {
     const id = req.body.id;
@@ -52,22 +87,10 @@ app.delete("/api/products/:id", async (req, res) => {
     }
 })
 
-app.put("/api/products/update", async (req, res) => {
-    const updatedProduct = req.body;
-    try {
-        await updateProduct(updatedProduct)
-        res.send({
-            status: "success",
-            message: "product updated"
-        })
-    } catch (error) {
-        res.send({
-            status: "fail",
-            message: error.message
-        })
-    }
-})
 
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`)
+// Initialize database then run server
+initDB().then(() => {
+    app.listen(port, () => {
+        console.log(`Server running at http://localhost:${port}`)
+    })
 })

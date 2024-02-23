@@ -1,8 +1,1 @@
-[
-  {
-    "price": 1000,
-    "name": "Oranges",
-    "description": "Fruits for sale",
-    "id": "44d98951-903c-4c3e-8602-22aa4b220fd6"
-  }
-]
+[{"price":1000,"name":"Tomatoes","description":"Fruits for sale","id":"44d98951-903c-4c3e-8602-22aa4b220fd6"}]

@@ -6,7 +6,7 @@ import * as Uuid from "uuid";
 const DB_FOLDER = path.join("src", "data")
 const PRODUCTS_FILE = path.join(DB_FOLDER, "productsData.json")
 
-async function addJsonData() {
+async function initDB() {
     try {
         if (!fs.existsSync(DB_FOLDER)) {
             await fsPromises.mkdir(DB_FOLDER)
@@ -21,17 +21,13 @@ async function addJsonData() {
         console.error(error)
         throw error;
     }
-
-    // Read the Products file
-    /**
-     * @type {{}[]}
-     */
+}
+const dbMethods = async () => {
     const getProducts = async () => {
         const products = JSON.parse(await fsPromises.readFile(PRODUCTS_FILE, { encoding: "utf8" }))
         return products
     }
 
-    
     const addProduct = async (...product) => {
         const products = await getProducts()
         if (!product) {
@@ -49,11 +45,12 @@ async function addJsonData() {
             console.error('Updated Product is invalid ', updatedProduct)
             throw new Error('Invalid Product')
         }
-        const productIndex = products.find((product) => product.id === updatedProduct.id)
+        const productIndex = products.findIndex((product) => product.id === updatedProduct.id)
         if (productIndex === -1) {
             console.error('No such product in database');
             throw new Error('No such product with id: ', updatedProduct.id)
         }
+        console.log(productIndex)
         products[productIndex] = updatedProduct;
         // Write updates to file
         await fsPromises.writeFile(PRODUCTS_FILE, JSON.stringify(products))
@@ -94,4 +91,4 @@ async function addJsonData() {
     }
 }
 
-export default addJsonData
+export { initDB, dbMethods }
