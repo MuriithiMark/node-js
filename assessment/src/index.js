@@ -13,7 +13,7 @@ app.get("/api/products", async (req, res) => {
     res.status(200).send(products).end()
 })
 
-// POST Product/s
+// POST Product
 app.post("/api/products", async (req, res) => {
     console.log('req.body ', req.body)
     const productsData = req.body;
