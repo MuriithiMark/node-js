@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "price": 1000,
+    "description": "Fruits for sale",
+    "id": "52a6d815-d25c-4476-97ca-587a9c2ad8f5"
+  },
+  {
+    "price": 1000,
+    "name": "Apples",
+    "description": "Fruits for sale",
+    "id": "e186b056-62cd-4f4f-a9e9-a91079e0fbb9"
+  }
+]

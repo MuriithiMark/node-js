@@ -28,14 +28,14 @@ const dbMethods = async () => {
         return products
     }
 
-    const addProduct = async (...product) => {
+    const addProduct = async (product) => {
         const products = await getProducts()
         if (!product) {
             console.error('Invalid Product ', product)
             throw new Error('Invalid Product');
         }
         product.id = Uuid.v4()
-        products.push(...product)
+        products.push(product)
         await fsPromises.writeFile(PRODUCTS_FILE, JSON.stringify(products))
     }
 
