@@ -38,16 +38,6 @@ const curryMaster = () => {
         curry
     }
 }
-curryMaster()
-    ["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()
-    ["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()
-    ["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()
-    ["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()
-    ["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()
-    ["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()
-    ["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()
-    ["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]()["now"]()["curry"]();
-
 
 import { query, validationResult, matchedData } from "express-validator";
 app.get("/helloValidated",
